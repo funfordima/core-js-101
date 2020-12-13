@@ -116,6 +116,155 @@ function fromJSON(proto, json) {
  *  For more examples see unit tests.
  */
 
+// class MySuperBaseElementSelector {
+//   constructor(value) {
+//     this.selector = [value] || [];
+//   }
+
+//   id(value) {
+//     if (this.selector.some((el) => el.includes('#'))) {
+//       throw Error('Element, id and pseudo-element should not occur
+// more then one time inside the selector');
+//     }
+//     this.selector.push(`#${value}`);
+//     return this;
+//   }
+
+//   class(value) {
+//     this.selector.push(`.${value}`);
+//     return this;
+//   }
+
+//   attr(value) {
+//     this.selector.push(`[${value}]`);
+//     return this;
+//   }
+
+//   pseudoClass(value) {
+//     this.selector.push(`:${value}`);
+//     return this;
+//   }
+
+//   pseudoElement(value) {
+//     if (this.selector.some((el) => el.includes('::'))) {
+//       throw Error('Element, id and pseudo-element should not occur
+//  more then one time inside the selector');
+//     }
+//     this.selector.push(`::${value}`);
+//     return this;
+//   }
+
+//   combine(selector1, combinator, selector2) {
+//     const s1 = selector1.stringify();
+//     const s2 = selector2.stringify();
+//     this.selector = [`${s1} ${combinator} ${s2}`];
+//     return this;
+//   }
+
+//   stringify() {
+//     const temp = this.selector;
+//     const countId = temp.filter((attr) => attr.startsWith('#')).length;
+//     const countEl = temp.reduce((acc, el, i, arr) => {
+//       if (arr.slice(i + 1).includes(el)) {
+//         acc.push(el);
+//       }
+//       return acc;
+//     }, []).length;
+//     const countPseudEl = temp.filter((attr) => attr.startsWith('::')).length;
+//     // console.log(countEl, countId, countPseudEl, temp);
+//     if (countId || countPseudEl || countEl) {
+//       // console.log('1');
+//       throw Error('Element, id and pseudo-element should not occur more
+// then one time inside the selector');
+//     }
+//     this.selector = [];
+//     return temp.join('');
+//   }
+// }
+
+// const cssSelectorBuilder = {
+// element(value = '') {
+// return new MySuperBaseElementSelector(value);
+// },
+
+// id(value) {
+// this.selector = this.element().selector;
+// if (this.selector.some((el) => el.includes('#'))) {
+// throw Error('Element, id and pseudo-element should not occur
+//  more then one time inside the selector');
+// }
+// this.selector.push(`#${value}`);
+// return this;
+// },
+
+// class(value) {
+// this.selector += `.${value}`;
+// return this;
+// },
+
+// attr(value) {
+// this.selector += `[${value}]`;
+// return this;
+// },
+
+// pseudoClass(value) {
+// this.selector += `:${value}`;
+// return this;
+// },
+
+// pseudoElement(value) {
+// if (this.selector.some((el) => el.includes('::'))) {
+// throw Error('Element, id and pseudo-element should not occur more then one
+// time inside the selector');
+// }
+// this.selector += `::${value}`;
+// return this;
+// },
+
+// combine(selector1, combinator, selector2) {
+// const s1 = selector1.stringify();
+// const s2 = selector2.stringify();
+// this.selector = `${s1} ${combinator} ${s2}`;
+// return this;
+// },
+
+// stringify() {
+// const temp = this.selector;
+// const countId = temp.filter((attr) => attr.startsWith('#')).length;
+// const countEl = temp.reduce((acc, el, i, arr) => {
+// if (arr.slice(i + 1).includes(el)) {
+//   acc.push(el);
+// }
+// return acc;
+// }, []).length;
+// const countPseudEl = temp.filter((attr) => attr.startsWith('::')).length;
+// if (countId || countPseudEl || countEl) {
+// throw Error('Element, id and pseudo-element should not
+// occur more then one time inside the selector');
+// }
+// this.selector = [];
+// return temp.join('');
+// },
+// };
+
+// console.log(['div'].join(""));
+// let temp = ['div', '.editable'];
+// console.log(temp.reduce((acc, el, i, arr) => {
+//   if (arr.slice(i + 1).includes(el)) {
+//     acc.push(el);;
+//   }
+//   return acc;
+// }, []));
+
+// console.log("div#nav-bar".replace(/^div/, ''));
+// const builder = cssSelectorBuilder;
+// console.log(builder.id('main').class('container').class('editable').stringify());
+
+// console.log(builder.combine(builder.element('div').id('main').class('container')
+//   .class('draggable'), '+', builder.combine(builder.element('table').id('data'), '~', builder
+//     .combine(builder.element('tr').pseudoClass('nth-of-type(even)'), ' ', builder
+//       .element('td').pseudoClass('nth-of-type(even)')))).stringify());
+
 const cssSelectorBuilder = {
   element(/* value */) {
     throw new Error('Not implemented');
@@ -145,16 +294,6 @@ const cssSelectorBuilder = {
     throw new Error('Not implemented');
   },
 };
-
-// console.log("div#nav-bar".replace(/^div/, ''));
-// const builder = cssSelectorBuilder;
-// console.log(builder.element('a'));
-
-// console.log(builder.combine(builder.element('div').id('main').class('container')
-//   .class('draggable'), '+', builder.combine(builder.element('table').id('data'), '~', builder
-//     .combine(builder.element('tr').pseudoClass('nth-of-type(even)'), ' ', builder
-//       .element('td').pseudoClass('nth-of-type(even)')))).stringify());
-
 
 module.exports = {
   Rectangle,

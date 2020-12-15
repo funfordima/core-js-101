@@ -63,8 +63,20 @@ function getPowerFunction(exponent) {
  *   getPolynom()      => null
  */
 function getPolynom(/* ...args */) {
-  // return function y(x) {
-  //   args.reverse().reduce((acc, item, ind) => acc + item * x ** ind, 0);
+  // if (!args.length) {
+  //   return null;
+  // }
+
+  // return (x) => {
+  //   if (!args.length) {
+  //     return null;
+  //   }
+
+  //   if (args.length === 1) {
+  //     return args[0];
+  //   }
+
+  //   return args.reverse().reduce((acc, item, ind) => acc + item * x ** ind, 0);
   // };
   throw new Error('Not implemented');
 }
@@ -83,8 +95,21 @@ function getPolynom(/* ...args */) {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(/* func */) {
-  throw new Error('Not implemented');
+function memoize(func) {
+  const map = new Map();
+
+  return (...args) => {
+    const hash = args.join('');
+
+    if (map.has(hash)) {
+      return map.get(hash);
+    }
+
+    const result = func(...args);
+    map.set(hash, result);
+
+    return result;
+  };
 }
 
 
@@ -103,8 +128,23 @@ function memoize(/* func */) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  let count = 0;
+  let result;
+  return function inner() {
+    try {
+      result = func();
+    } catch (err) {
+      if (count <= attempts) {
+        count += 1;
+        inner();
+      } else {
+        return attempts;
+      }
+    }
+
+    return result;
+  };
 }
 
 
@@ -149,10 +189,20 @@ function logger(/* func, logFunc */) {
  *   partialUsingArguments(fn, 'a','b','c')('d') => 'abcd'
  *   partialUsingArguments(fn, 'a','b','c','d')() => 'abcd'
  */
-function partialUsingArguments(/* fn, ...args1 */) {
-  throw new Error('Not implemented');
-}
+function partialUsingArguments(fn, ...args1) {
+  let resultFn = fn;
 
+  function stepFn(...arg) {
+    resultFn = resultFn.bind(null, ...args1, ...arg);
+    if (resultFn.length) {
+      return stepFn;
+    }
+
+    return resultFn();
+  }
+
+  return stepFn;
+}
 
 /**
  * Returns the id generator function that returns next integer starting
@@ -171,10 +221,15 @@ function partialUsingArguments(/* fn, ...args1 */) {
  *   getId4() => 7
  *   getId10() => 11
  */
-function getIdGeneratorFunction(/* startFrom */) {
-  throw new Error('Not implemented');
+function getIdGeneratorFunction(startFrom) {
+  let acc;
+  let param = startFrom;
+  return () => {
+    acc = param;
+    param += 1;
+    return acc;
+  };
 }
-
 
 module.exports = {
   getComposition,
